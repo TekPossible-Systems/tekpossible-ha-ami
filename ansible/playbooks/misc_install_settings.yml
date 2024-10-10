@@ -1,0 +1,12 @@
+# ---
+
+# TODO: I got tired so I am going to sleep. I will finish the ansible for this tomorrow. Really is just converting the shell script stuff into ansible code
+# - name: Assorted pre deployment configurations
+#   hosts: 'all'
+#   connection: local
+#   become: True
+#   tasks:
+#     - name: Install Wazuh Agent
+#     - name: Ensure AWS SSM Agent is installed
+#     - name: Ensure Codedeploy Agent is installed
+#     - name: Hostname Software dependencies

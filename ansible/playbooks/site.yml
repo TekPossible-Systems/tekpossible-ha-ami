@@ -1,0 +1,11 @@
+---
+
+# Apply DISA STIG
+- ansible.builtin.import_playbook: './stig_rhel.yml'
+
+# Software Prerequisites
+- ansible.builtin.import_playbook: './misc_install_settings.yml'
+
+# Stage software to be install on image first run
+- ansible.builtin.import_playbook: './software_staging.yml'
+

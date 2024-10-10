@@ -1,0 +1,34 @@
+---
+
+- name: Stage Software For Install at First Bootup
+  hosts: 'all'
+  become: True
+  connection: local
+  tasks:
+    - name: Install EPEL Repo
+      dnf: 
+        name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm"
+        state: installed
+        
+    - name: Ensure that the AWSCLI is installed
+      dnf: 
+        name: awscli
+        state: installed
+    
+    - name: Copy the specified file from our S3 bucket and ensure that it is good
+      shell:
+        cmd: |
+          mkdir /root/software-preinstall
+          aws s3 cp {{ software_s3_bucket }} /root/software-preinstall/
+    
+    - name: Check the hash of the tar file we just downloaded 
+      shell: 
+        cmd: |
+          sha256sum /root/software-preinstall/*.tar | grep {{ software_tar_hash }}
+    
+    - name: Now we should be safe to untar the file and run our staging script
+      shell:
+        cmd: |
+          cd /root/software-preinstall/
+          tar -xf ./*.tar
+          bash ./staging.sh
