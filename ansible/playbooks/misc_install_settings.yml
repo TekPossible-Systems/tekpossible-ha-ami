@@ -1,12 +1,40 @@
-# ---
+---
 
-# TODO: I got tired so I am going to sleep. I will finish the ansible for this tomorrow. Really is just converting the shell script stuff into ansible code
-# - name: Assorted pre deployment configurations
-#   hosts: 'all'
-#   connection: local
-#   become: True
-#   tasks:
-#     - name: Install Wazuh Agent
-#     - name: Ensure AWS SSM Agent is installed
-#     - name: Ensure Codedeploy Agent is installed
-#     - name: Hostname Software dependencies
+- name: Assorted pre deployment configurations
+  hosts: 'all'
+  connection: local
+  become: True
+  tasks:
+    - name: Install AWS SSM Agent
+      dnf: 
+        name: 'https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm'
+        state: installed
+
+    - name: Enable AWS SSM Service
+      ansible.builtin.systemd:
+        name: amazon-ssm-agent
+        state: started
+        enabled: true
+
+    - name: Ensure Codedeploy Agent dependency is installed
+      dnf: 
+        name: 'ruby'
+        state: installed
+    
+    - name: Run install scripts for Codedeploy from AWS
+      shell:
+        cmd: |
+          cd /home/ec2-user
+          wget https://aws-codedeploy-us-west-2.s3.us-west-2.amazonaws.com/latest/install
+          chmod +x ./install
+          sudo ./install auto
+
+    - name: Hostname Software dependencies
+      dnf: 
+        name: uuid
+        state: installed
+
+    - name: Update the system
+      dnf: 
+       name: '*'
+       state: latest

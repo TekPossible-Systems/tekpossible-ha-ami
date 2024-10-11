@@ -10,9 +10,13 @@
         name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm"
         state: installed
         
-    - name: Ensure that the AWSCLI is installed
+    - name: Ensure that software deps are installed
       dnf: 
-        name: awscli
+        name: 
+         - awscli
+         - httpd
+         - mod_ssl
+         - firewalld
         state: installed
     
     - name: Copy the specified file from our S3 bucket and ensure that it is good
@@ -32,3 +36,9 @@
           cd /root/software-preinstall/
           tar -xf ./*.tar
           bash ./staging.sh
+
+    - name: Enable httpd
+      ansible.builtin.systemd:
+        name: httpd
+        state: started
+        enabled: true
