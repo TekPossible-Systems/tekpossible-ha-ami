@@ -2,9 +2,4 @@ version: 0.2
 phases:
   install:
     commands:
-      - yum install -y git python3-pip
-      - pip3 install git-remote-codecommit
-      - git config --global credential.helper '!aws codecommit credential-helper $@'
-      - git config --global credential.UseHttpPath true
       - bash ./execute_imagebuilder.sh
-      - # TODO: Need to add the git config and value swapper that will go either in the execute_imagebuilder or in this file. Probably will put it in the execute_imagebuilder script though
