@@ -6,4 +6,5 @@ sed -i 's/do_reboot/do_notify_reboot/g' roles/rhel9STIG/tasks/main.yml
 echo "- name: do_notify_reboot\n  debug:\n    msg: 'AMI does not need reboot.'" >> ./roles/rhel9STIG/handlers/main.yml
 
 # Run ansible local setup
+ansible-galaxy collection install community.general ansible.posix
 ansible-playbook playbooks/site.yml -c local -vv -i inventory/localsetup
