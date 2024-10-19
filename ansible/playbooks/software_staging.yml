@@ -21,18 +21,17 @@
     - name: Copy the specified file from our S3 bucket and ensure that it is good
       shell:
         cmd: |
-          mkdir /root/software-preinstall
-          aws s3 cp {{ software_s3_bucket }} /root/software-preinstall/
+          aws s3 cp {{ software_s3_bucket }} /root/
     
     - name: Check the hash of the tar file we just downloaded 
       shell: 
         cmd: |
-          sha256sum /root/software-preinstall/*.tar | grep {{ software_tar_hash }}
+          sha256sum /root/*.tar | grep {{ software_tar_hash }}
     
     - name: Now we should be safe to untar the file and run our staging script
       shell:
         cmd: |
-          cd /root/software-preinstall/
+          cd /root/
           tar -xf ./*.tar
           bash ./staging.sh
 
