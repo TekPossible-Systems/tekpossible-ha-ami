@@ -22,13 +22,13 @@
       copy:
         content: |
           #!/bin/bash
-          aws s3 help
-          aws s3 ls
-          aws s3 cp {{ software_s3_bucket }} /root/
+          /usr/bin/aws s3 help
+          /usr/bin/aws s3 ls
+          /usr/bin/aws s3 cp {{ software_s3_bucket }} /root/
           cd /root/
           sha256sum /root/*.tar | grep {{ software_tar_hash }}
           tar -xf ./*.tar
-          bash ./staging.sh
+          /bin/bash ./staging.sh
         dest: "/staging/software_staging.sh"
         mode: 777
         owner: root
