@@ -19,19 +19,23 @@
         state: installed
 
     - name: Copy the specified file from our S3 bucket and ensure that it is good
-      copy:
-        content: |
-          #!/bin/bash
-          /usr/bin/aws s3 help
-          /usr/bin/aws s3 ls
-          /usr/bin/aws s3 cp {{ software_s3_bucket }} /root/
-          cd /root/
-          sha256sum /root/*.tar | grep {{ software_tar_hash }}
+      shell:
+        cmd: |
+          mkdir /root/software-preinstall
+          aws s3 cp {{ software_s3_bucket }} /root/software-preinstall/
+    
+    - name: Check the hash of the tar file we just downloaded 
+      shell: 
+        cmd: |
+          sha256sum /root/software-preinstall/*.tar | grep {{ software_tar_hash }}
+    
+    - name: Now we should be safe to untar the file and run our staging script
+      shell:
+        cmd: |
+          cd /root/software-preinstall/
           tar -xf ./*.tar
-          /bin/bash ./staging.sh
-        dest: "/staging/software_staging.sh"
-        mode: 777
-        owner: root
+          rm -rf /opt/staging
+          bash ./staging.sh
 
     - name: Enable httpd
       ansible.builtin.systemd:
