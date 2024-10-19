@@ -20,15 +20,7 @@
       dnf: 
         name: 'ruby'
         state: installed
-    
-    - name: Run install scripts for Codedeploy from AWS
-      shell:
-        cmd: |
-          cd /root
-          wget https://aws-codedeploy-us-west-2.s3.us-west-2.amazonaws.com/latest/install
-          chmod +x ./install
-          ./install auto
-
+        
     - name: Hostname Software dependencies
       dnf: 
         name: uuid
