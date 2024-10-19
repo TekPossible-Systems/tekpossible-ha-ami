@@ -5,6 +5,8 @@ pip3 install git-remote-codecommit
 git config --global credential.helper '!aws codecommit credential-helper $@'
 git config --global credential.UseHttpPath true
 export CURRENT_BRANCH=$(git branch --show-current)
+export CI_CD_USERNAME="CI/CD TekPossible GEM"
+export CI_CD_EMAIL="ci-cd@tekpossible.com"
 export CDK_STACK_BASE_NAME_LOWER="tekpossible-stratagem"
 export IMAGE_PIPELINE_ARN=$(aws ssm get-parameter --name $CDK_STACK_BASE_NAME_LOWER-imagebuilder-arn --query 'Parameter.Value' | sed 's/"//g')
 export IMAGE_VERSION_ARN=$(aws imagebuilder start-image-pipeline-execution --image-pipeline-arn $IMAGE_PIPELINE_ARN --query 'imageBuildVersionArn' | sed 's/"//g')
@@ -32,5 +34,7 @@ git clone $INFRA_REPO_URL
 cd /tmp/*infrastructure*
 git checkout $CURRENT_BRANCH
 python3 ./ami_config_modifier.py $REGION $AMI_IMAGE_ID
+git config --global user.email "$CI_CD_EMAIL"
+git config --global user.name "$CI_CD_USERNAME"
 git commit -am "Automated CI/CD Commit from AMI Repo. Added updated AMI ID to the infrastructure configuration."
 git push
