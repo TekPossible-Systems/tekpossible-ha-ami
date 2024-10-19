@@ -24,10 +24,10 @@
     - name: Run install scripts for Codedeploy from AWS
       shell:
         cmd: |
-          cd /home/ec2-user
+          cd /root
           wget https://aws-codedeploy-us-west-2.s3.us-west-2.amazonaws.com/latest/install
           chmod +x ./install
-          sudo ./install auto
+          ./install auto
 
     - name: Hostname Software dependencies
       dnf: 
