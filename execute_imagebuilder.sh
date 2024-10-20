@@ -12,7 +12,7 @@ export IMAGE_PIPELINE_ARN=$(aws ssm get-parameter --name $CDK_STACK_BASE_NAME_LO
 export IMAGE_VERSION_ARN=$(aws imagebuilder start-image-pipeline-execution --image-pipeline-arn $IMAGE_PIPELINE_ARN --query 'imageBuildVersionArn' | sed 's/"//g')
 export IMAGE_STATE=$(aws imagebuilder get-image --image-build-version-arn $IMAGE_VERSION_ARN --query 'image.state.status'  | sed 's/"//g')
 export INFRA_REPO_URL=$(aws ssm get-parameter --name $CDK_STACK_BASE_NAME_LOWER-infrastructure-repo --query 'Parameter.Value' | sed 's/"//g')
-export REGION=$(aws configure get region)
+export REGION=$(aws ssm get-parameter --name $CDK_STACK_BASE_NAME_LOWER-region --query 'Parameter.Value' | sed 's/"//g')
 echo "The Image Builder Pipeline started. Please go to the imagebuilder pipeline console if you wish to see more about this build"
 echo "The image version ARN is $IMAGE_VERSION_ARN"
 
