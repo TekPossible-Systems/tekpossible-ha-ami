@@ -667,10 +667,10 @@ rhel9STIG_stigrule_258083_sudo_State: installed
 rhel9STIG_stigrule_258084_Manage: True
 rhel9STIG_stigrule_258084__etc_sudoers_Line: 'Defaults timestamp_timeout=0'
 # R-258089 RHEL-09-433010
-rhel9STIG_stigrule_258089_Manage: True
+rhel9STIG_stigrule_258089_Manage: False
 rhel9STIG_stigrule_258089_fapolicyd_State: installed
 # R-258090 RHEL-09-433015
-rhel9STIG_stigrule_258090_Manage: True
+rhel9STIG_stigrule_258090_Manage: False
 rhel9STIG_stigrule_258090_fapolicyd_enable_Enabled: yes
 rhel9STIG_stigrule_258090_fapolicyd_start_State: started
 # R-258101 RHEL-09-611060
