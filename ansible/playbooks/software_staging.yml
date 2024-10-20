@@ -37,6 +37,11 @@
           rm -rf /opt/staging
           bash ./staging.sh
 
+    - name: Set a cool ascii motd banner
+      copy:
+        dest: '/etc/motd'
+        src: 'motd'
+
     - name: Enable httpd
       ansible.builtin.systemd:
         name: httpd
