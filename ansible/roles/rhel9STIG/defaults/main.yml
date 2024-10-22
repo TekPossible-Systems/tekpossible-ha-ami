@@ -338,7 +338,7 @@ rhel9STIG_stigrule_257946__etc_chrony_conf_Line: 'port 0'
 rhel9STIG_stigrule_257947_Manage: True
 rhel9STIG_stigrule_257947__etc_chrony_conf_Line: 'cmdport 0'
 # R-257949 RHEL-09-252040
-rhel9STIG_stigrule_257949_Manage: True
+rhel9STIG_stigrule_257949_Manage: False
 rhel9STIG_stigrule_257949__etc_NetworkManager_NetworkManager_conf_Value: 'none'
 # R-257954 RHEL-09-252065
 rhel9STIG_stigrule_257954_Manage: True
