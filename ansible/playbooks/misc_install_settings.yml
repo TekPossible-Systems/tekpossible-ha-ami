@@ -5,6 +5,17 @@
   connection: local
   become: True
   tasks:
+
+    - name: Install GPG Key AWS - Step 1
+      copy:
+        src: amazon-gpg-key
+        dest: /etc/pki/rpm-gpg/amazon-gpg-key
+    
+    - name: install GPG Key AWS - Step 2
+      shell:
+        cmd: |
+          rpm --import /etc/pki/rpm-gpg/amazon-gpg-key
+          
     - name: Install AWS SSM Agent
       dnf: 
         name: 'https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm'
