@@ -13,6 +13,7 @@ export IMAGE_VERSION_ARN=$(aws imagebuilder start-image-pipeline-execution --ima
 export IMAGE_STATE=$(aws imagebuilder get-image --image-build-version-arn $IMAGE_VERSION_ARN --query 'image.state.status'  | sed 's/"//g')
 export INFRA_REPO_URL=$(aws ssm get-parameter --name $CDK_STACK_BASE_NAME_LOWER-infrastructure-repo --query 'Parameter.Value' | sed 's/"//g')
 export REGION=$(aws ssm get-parameter --name $CDK_STACK_BASE_NAME_LOWER-region --query 'Parameter.Value' | sed 's/"//g')
+export BUCKET_NAME=$(aws ssm get-parameter --name $CDK_STACK_BASE_NAME_LOWER-s3-bucket --query 'Parameter.Value' | sed 's/"//g')
 echo "The Image Builder Pipeline started. Please go to the imagebuilder pipeline console if you wish to see more about this build"
 echo "The image version ARN is $IMAGE_VERSION_ARN"
 
@@ -30,7 +31,7 @@ export AMI_IMAGE_ID=$(aws ec2 describe-images --filters "Name=tag:Ec2ImageBuilde
 echo "The following AMI ID will be used: $AMI_IMAGE_ID"
 
 # GRAB the Generated Artifacts and Stage them in our current directory
-aws s3 cp $S3_BUCKET_NAME/artifact-os-security.zip ./artifact-os-security.zip
+aws s3 cp s3://$BUCKET_NAME/artifact-os-security.zip ./artifact-os-security.zip
 
 cd /tmp
 git clone $INFRA_REPO_URL
