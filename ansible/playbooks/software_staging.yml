@@ -16,6 +16,7 @@
          - httpd
          - mod_ssl
          - firewalld
+         - zip
         state: installed
 
     - name: Copy the specified file from our S3 bucket and ensure that it is good
