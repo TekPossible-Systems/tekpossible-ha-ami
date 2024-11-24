@@ -1,0 +1,42 @@
+---
+
+- name: Generate SCC Results and CycloneDX SBOM
+  become: True
+  hosts: 'all'
+  gather_facts: True
+  tasks:
+    - name: Install Distro SBOM Software with PIP
+      ansible.builtin.pip:
+        name: distro2sbom
+    
+    - name: Generate RPM List
+      shell:
+        cmd: |
+          rpm -qa > /root/rpms.txt
+    
+    - name: Run distro2sbom using generated rpm list
+      shell:
+        cmd: |
+          /usr/local/bin/distro2sbom --distro rpm -i /root/rpms.txt --format json -o /root/sbom-`date +"%s"`.json --sbom cyclonedx
+    
+    - name: Grab SCC Software from DISA and Create SCC Output Folder
+      shell:
+        cmd: |
+          curl {{ scc_download_url }} -o /root/scc.zip
+          cd /root
+          unzip /root/scc.zip
+          cd /root/scc*
+          dnf install -y ./*.rpm --nogpgcheck
+          mkdir /root/SCC_OUTPUT
+    
+    - name: Copy options.xml file into /opt/scc
+      copy:
+        src: 'options.xml'
+        dest: '/opt/scc/options.xml'
+    
+    - name: Scan with SCC - Start Scan as systemd service
+      shell:
+        cmd: |
+          systemd-run --unit=scc.service /opt/scc/cscc
+      until: 
+      retries: 300 # Make sure to wait a while as SCC is slow to scan
