@@ -29,6 +29,9 @@ echo "Image builder succeeded. Working on commiting the AMI ID to the infrastruc
 export AMI_IMAGE_ID=$(aws ec2 describe-images --filters "Name=tag:Ec2ImageBuilderArn,Values=$IMAGE_VERSION_ARN" --query 'Images[0].ImageId' | sed 's/"//g')
 echo "The following AMI ID will be used: $AMI_IMAGE_ID"
 
+# GRAB the Generated Artifacts and Stage them in our current directory
+aws s3 cp $S3_BUCKET_NAME/artifact-os-security.zip ./artifact-os-security.zip
+
 cd /tmp
 git clone $INFRA_REPO_URL
 cd /tmp/*infrastructure*
