@@ -27,11 +27,10 @@
     - name: Set status of kdump.service
       ansible.builtin.systemd:
         name: kdump.service
-        state: disabled
+        state: stopped
+        enabled: false
         masked: true
     
-    #  - name: cron permissions RHEL-09-232040
-
     - name: home directory permissions
       shell:
         cmd: | 
