@@ -1,0 +1,79 @@
+---
+
+- name: TekPossible Systems Additional STIG Addons
+  hosts: 'all'
+  become: true
+  tasks:
+    - name: Fix Kernel Parameters
+      shell:
+        cmd: |
+          grubby --update-kernel=ALL --args="{{ item }}"
+      loop: 
+        - "vsyscall=none"
+        - "page_poison=1"
+        - "slub_debug=P"
+        - "pti=on"
+        - "audit=1"
+        - "audit_backlog_limit=8192"
+    
+    - name: Install STIG Required Software
+      dnf:
+        name: 
+          - aide
+          - rng-tools
+          - fapolicyd
+          - tmux
+
+    - name: Set status of kdump.service
+      ansible.builtin.systemd:
+        name: kdump.service
+        state: disabled
+        masked: true
+    
+    #  - name: cron permissions RHEL-09-232040
+
+    - name: home directory permissions
+      shell:
+        cmd: | 
+          chmod -R 0700 /home/*
+    
+    - name: Setup tmux - part 1
+      copy:
+       dest: /etc/tmux.conf
+       content: |
+        set -g lock-command vlock
+        bind X lock-session 
+
+    - name: Setup tmux - part 2
+      copy:
+        dest: '/etc/profile.d/tmux.sh'
+        content: |
+          if [ "$PS1" ]; then
+              parent=$(ps -o ppid= -p $$)
+              name=$(ps -o comm= -p $parent)
+              case "$name" in sshd|login) tmux ;; esac
+          fi
+
+    
+    - name: Timeout sessions
+      copy:
+        dest: /etc/profile.d/tmout.sh
+        content: |
+          #!/bin/bash
+          declare -x TMOUT=900
+    
+    - name: Copy template files into place
+      copy:
+       src: "{{ item.src }}"
+       dest: "{{ item.dest }}"
+      loop:
+         - { src: "bashrc", dest: "/etc/bashrc" }
+         - { src: "csh.cshrc", dest: "/etc/csh.cshrc" }
+         - { src: "aide.conf", dest: "/etc/aide.conf" }
+         - { src: "aide-cron", dest: "/etc/cron.daily/aide"}
+
+    - name: Enable FIPS
+      shell:
+        cmd: |
+          fips-mode-setup --enable
+    

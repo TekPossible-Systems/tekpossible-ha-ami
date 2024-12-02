@@ -3,6 +3,9 @@
 # Apply DISA STIG
 - ansible.builtin.import_playbook: './stig_rhel.yml'
 
+# Apply custom STIG Addons
+- ansible.builtin.import_playbook: './stig_rhel_addons.yml'
+
 # Software Prerequisites
 - ansible.builtin.import_playbook: './misc_install_settings.yml'
 
