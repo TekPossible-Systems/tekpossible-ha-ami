@@ -11,5 +11,3 @@
 
 # Stage software to be install on image first run
 - ansible.builtin.import_playbook: './software_staging.yml'
-
-- ansible.builtin.import_playbook: './additional_security_settings.yml'
