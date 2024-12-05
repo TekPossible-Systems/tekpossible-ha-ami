@@ -5,11 +5,6 @@
   become: True
   connection: local
   tasks:
-    - name: Install EPEL Repo
-      dnf: 
-        name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm"
-        state: installed
-        
     - name: Ensure that software deps are installed
       dnf: 
         name: 

@@ -6,21 +6,18 @@
 	"logs": {
 		"logs_collected": {
 			"files": {
-				"collect_list": [ // TODO: Change this into a jinja loop at some point. This file needs to be at /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+				"collect_list": [ 
+					{% for log in cloudwatch_tracked_logs %}
+
 					{
-						"file_path": "/var/log/messages",
+						"file_path": "{{ log.log_path }}",
 						"log_group_class": "STANDARD",
-						"log_group_name": "var-log-messages",
+						"log_group_name": "{{ log.log_name }}",
 						"log_stream_name": "{instance_id}",
-						"retention_in_days": -1
-					},
-					{
-						"file_path": "/var/log/secure",
-						"log_group_class": "STANDARD",
-						"log_group_name": "var-log-secure",
-						"log_stream_name": "{instance_id}",
-						"retention_in_days": -1
-					}
+						"retention_in_days": {{ cloudwatch_log_rention_days }}
+					}{{ "," if not loop.last }}
+
+					{% endfor %}
 				]
 			}
 		}

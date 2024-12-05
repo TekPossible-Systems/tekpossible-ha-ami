@@ -9,5 +9,8 @@
 # Software Prerequisites
 - ansible.builtin.import_playbook: './misc_install_settings.yml'
 
+# Setup and install Cloudwatch agent
+- ansible.builtin.import_playbook: './deploy_cloudwatch_agent.yml'
+
 # Stage software to be install on image first run
 - ansible.builtin.import_playbook: './software_staging.yml'

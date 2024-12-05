@@ -10,7 +10,13 @@
       copy:
         src: amazon-gpg-key
         dest: /etc/pki/rpm-gpg/amazon-gpg-key
-    
+
+    - name: Install EPEL Repo
+      dnf: 
+        name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm"
+        disable_gpg_check: true
+        state: installed
+        
     - name: Install AWS SSM Agent
       dnf: 
         name: 'https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm'
