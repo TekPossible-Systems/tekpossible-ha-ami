@@ -76,3 +76,8 @@
         cmd: |
           fips-mode-setup --enable
     
+    - name: EFS Enforce FIPS for TLS Connections
+      lineinfile:
+        path: "/etc/amazon/efs/efs-utils.conf"
+        regex: "^.*fips_mode_enabled.*$ "
+        line: "fips_mode_enabled = true"
