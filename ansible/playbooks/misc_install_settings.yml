@@ -55,7 +55,7 @@
        state: latest
 
     - name: EFS Enforce FIPS for TLS Connections
-      lineinfile:
+      replace:
         path: "/etc/amazon/efs/efs-utils.conf"
-        regex: "^.*fips_mode_enabled.*$ "
-        line: "fips_mode_enabled = true"
+        regexp: "^.*fips_mode_enabled.*$"
+        replace: "fips_mode_enabled = true"
